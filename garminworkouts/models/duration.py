@@ -16,7 +16,9 @@ class Duration:
             [seconds] = self._tokenize()
             return self._to_seconds(seconds)
         else:
-            raise ValueError("Unknown duration %s, expected format HH:MM:SS" % self.duration)
+            raise ValueError(
+                "Unknown duration %s, expected format HH:MM:SS" % self.duration
+            )
 
     def _tokenize(self):
         return self.duration.split(":")

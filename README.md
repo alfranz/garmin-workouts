@@ -1,5 +1,6 @@
 # Garmin Connect Workouts Tools
 
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![CI](https://github.com/alfranz/garmin-workouts/actions/workflows/ci.yml/badge.svg)](https://github.com/mkuthan/garmin-workouts/alfranz/workflows/ci.yml)
 
 Command line tools for managing Garmin Connect workouts.
@@ -26,14 +27,14 @@ Requirements:
 Clone this repo:
 
 ```shell
-git clone https://github.com/mkuthan/garmin-workouts.git
+git clone https://github.com/alfranz/garmin-workouts.git
 ```
 
 Use the venv command to create a virtual copy of the entire Python installation.:
 
 ```shell
 cd garmin-workouts
-python3 -m venv venv
+python -m venv venv
 ```
 
 Set your shell to use the venv paths for Python by activating the virtual environment:
@@ -45,7 +46,8 @@ source venv/bin/activate
 Install dependencies:
 
 ```shell
-pip3 install -r requirements.txt
+pip install -r requirements.txt
+pre-commit install
 ```
 
 ## Usage

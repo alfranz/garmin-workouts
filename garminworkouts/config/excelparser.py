@@ -69,7 +69,9 @@ def excel_to_yaml(filename, seconds_block=10):  # noqa: C901
         power_type = df.loc[i, "power_type"]
         if n_blocks == 1:
             template = '  - {{ power: {power}{power_type}, duration: "{duration}" }}\n'
-            return template.format(power=int(start), power_type=power_type, duration=duration)
+            return template.format(
+                power=int(start), power_type=power_type, duration=duration
+            )
         elif n_blocks > 1:
             seconds = int(duration.split(":")[-1]) + int(duration.split(":")[-2]) * 60
             # n_blocks=seconds/seconds_block
@@ -82,7 +84,9 @@ def excel_to_yaml(filename, seconds_block=10):  # noqa: C901
             steps_text = ""
             total_time = 0
             while total_time <= seconds:
-                text = '  - {{ power: {0}{1}, duration: "{2}" }}\n'.format(int(start), power_type, duration)
+                text = '  - {{ power: {0}{1}, duration: "{2}" }}\n'.format(
+                    int(start), power_type, duration
+                )
                 steps_text = steps_text + text
                 if start <= end:
                     start = start + power_step
@@ -96,7 +100,7 @@ def excel_to_yaml(filename, seconds_block=10):  # noqa: C901
         step = create_steps(i)
         steps = steps + step
 
-    yaml_text = '{workout_name}\n{steps}'.format(workout_name=workout_name, steps=steps)
+    yaml_text = "{workout_name}\n{steps}".format(workout_name=workout_name, steps=steps)
 
     filename = filename.split(".xls")[0] + ".yaml"
     with open(filename, "w") as fout:

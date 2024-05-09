@@ -15,7 +15,11 @@ def fill(x, n):
 
 def filter_empty(value):
     if isinstance(value, list):
-        return [filter_empty(val) for val in value if not (val is None or val == [] or val == {})]
+        return [
+            filter_empty(val)
+            for val in value
+            if not (val is None or val == [] or val == {})
+        ]
     elif isinstance(value, dict):
         return {
             key: filter_empty(val)
