@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
-      - run: flake8 garminworkouts tests
+      - run: ruff garminworkouts tests
 
   build:
     runs-on: ubuntu-latest
