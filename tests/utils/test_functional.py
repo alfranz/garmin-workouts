@@ -21,7 +21,9 @@ class FunctionalTestCase(unittest.TestCase):
 
     @staticmethod
     def test_concatenate():
-        np.testing.assert_array_equal(functional.concatenate([0, 1], [2, 3]), [0, 1, 2, 3])
+        np.testing.assert_array_equal(
+            functional.concatenate([0, 1], [2, 3]), [0, 1, 2, 3]
+        )
 
     def test_filter_empty_value_is_none(self):
         value = {"k1": "v1", "k2": None}
@@ -37,16 +39,22 @@ class FunctionalTestCase(unittest.TestCase):
 
     def test_filter_empty_nested_value_is_none(self):
         value = {"k1": "v1", "k2": {"k3": "v3", "k4": None}}
-        self.assertEqual(functional.filter_empty(value), {"k1": "v1", "k2": {"k3": "v3"}})
+        self.assertEqual(
+            functional.filter_empty(value), {"k1": "v1", "k2": {"k3": "v3"}}
+        )
 
     def test_filter_empty_nested_value_is_empty_array(self):
         value = {"k1": "v1", "k2": {"k3": "v3", "k4": []}}
-        self.assertEqual(functional.filter_empty(value), {"k1": "v1", "k2": {"k3": "v3"}})
+        self.assertEqual(
+            functional.filter_empty(value), {"k1": "v1", "k2": {"k3": "v3"}}
+        )
 
     def test_filter_empty_nested_value_is_empty_dict(self):
         value = {"k1": "v1", "k2": {"k3": "v3", "k4": []}}
-        self.assertEqual(functional.filter_empty(value), {"k1": "v1", "k2": {"k3": "v3"}})
+        self.assertEqual(
+            functional.filter_empty(value), {"k1": "v1", "k2": {"k3": "v3"}}
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

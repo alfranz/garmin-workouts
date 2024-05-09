@@ -10,7 +10,9 @@ class Power:
             raise ValueError("FTP must be between 0 [W] and 999 [W] but was %s" % ftp)
 
         if not -1.0 < float(diff) < 1.0:
-            raise ValueError("Power diff must be between -0.99 and 0.99 but was %s" % diff)
+            raise ValueError(
+                "Power diff must be between -0.99 and 0.99 but was %s" % diff
+            )
 
         if self._has_watt():
             absolute_power = int(self.power[:-1])
@@ -20,7 +22,9 @@ class Power:
             absolute_power = self._to_absolute(self.power, ftp)
 
         if not 0 <= int(absolute_power) < 5000:
-            raise ValueError("Power must be between 0 [W] and 49999 [W] but was %s" % absolute_power)
+            raise ValueError(
+                "Power must be between 0 [W] and 49999 [W] but was %s" % absolute_power
+            )
 
         return round(absolute_power * (1 + diff))
 
