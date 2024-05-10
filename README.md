@@ -2,12 +2,15 @@
 
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![CI](https://github.com/alfranz/garmin-workouts/actions/workflows/ci.yml/badge.svg)](https://github.com/mkuthan/garmin-workouts/alfranz/workflows/ci.yml)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/alfranz/garmin-workouts/master.svg)](https://results.pre-commit.ci/latest/github/alfranz/garmin-workouts/master)
 
 Command line tools for managing Garmin Connect workouts.
 
+*Note: This is a fork of the original project by [mkuthan](https://github.com/mkuthan/garmin-workouts)*
+
 Features:
 
-* Target power is set according to Your current FTP.
+* Target power is set according to your current FTP.
 * All workouts under Your control stored as JSON files.
 * Easy to understand workout format, see examples below.
 * Workout parts like warm-up or cool-down are reusable.
@@ -22,7 +25,7 @@ Features:
 
 Requirements:
 
-* Python 3.x ([doc](https://www.python.org/downloads/))
+* Python 3.9-3.11
 
 Clone this repo:
 

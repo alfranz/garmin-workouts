@@ -4,14 +4,10 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup
-      - run: pre-commit run --from-ref origin/HEAD --to-ref HEAD
 
   build:
     runs-on: ubuntu-latest
