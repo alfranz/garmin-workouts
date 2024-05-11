@@ -1,7 +1,7 @@
 # Garmin Connect Workouts Tools
 
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![CI](https://github.com/alfranz/garmin-workouts/actions/workflows/ci.yml/badge.svg)](https://github.com/mkuthan/garmin-workouts/alfranz/workflows/ci.yml)
+[![CI](https://github.com/alfranz/garmin-workouts/actions/workflows/ci.yml/badge.svg)](https://github.com/alfranz/garmin-workouts/actions/workflows/ci.yml)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/alfranz/garmin-workouts/master.svg)](https://results.pre-commit.ci/latest/github/alfranz/garmin-workouts/master)
 
 Command line tools for managing Garmin Connect workouts.
