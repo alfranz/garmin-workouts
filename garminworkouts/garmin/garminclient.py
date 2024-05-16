@@ -1,97 +1,102 @@
-import json
-import sys
+import logging
+import garth
+from typing import Optional, Dict, Any
+import os
 
-from garminworkouts.garmin.session import connect, disconnect
+logger = logging.getLogger(__name__)
 
 
-class GarminClient(object):
-    _WORKOUT_SERVICE_ENDPOINT = "/proxy/workout-service"
+class GarminException(Exception):
+    """Base exception for all exceptions."""
 
-    _REQUIRED_HEADERS = {
-        "Referer": "https://connect.garmin.com/modern/workouts",
-        "nk": "NT",
-    }
+    msg: str
 
-    def __init__(self, connect_url, sso_url, username, password, cookie_jar):
-        self.connect_url = connect_url
-        self.sso_url = sso_url
-        self.username = username
-        self.password = password
-        self.cookie_jar = cookie_jar
 
-    def __enter__(self):
-        self.session = connect(
-            self.connect_url,
-            self.sso_url,
-            self.username,
-            self.password,
-            self.cookie_jar,
+class GarminClient:
+    def __init__(self, username: Optional[str] = None, password: Optional[str] = None):
+        if not username and not os.getenv("GARMIN_USERNAME"):
+            raise GarminException("Username is required")
+        if not password and not os.getenv("GARMIN_PASSWORD"):
+            raise GarminException("Password is required")
+
+        self.username = os.getenv("GARMIN_USERNAME") if username is None else "username"
+        self.password = os.getenv("GARMIN_PASSWORD") if password is None else "password"
+        self.garth = garth.Client(domain="garmin.com")
+
+        self.garmin_connect_user_settings_url = (
+            "/userprofile-service/userprofile/user-settings"
         )
-        return self
+        self.garmin_workouts = "/workout-service"
+        self.garmin_connect_hrv_url = "/hrv-service/hrv"
 
-    def __exit__(self, exc_type, exc_value, traceback):
-        disconnect(self.session)
+        self.prompt_mfa = None
 
-    def list_workouts(self, batch_size=100):
-        for start_index in range(0, sys.maxsize, batch_size):
-            url = f"{self.connect_url}{GarminClient._WORKOUT_SERVICE_ENDPOINT}/workouts"
-            params = {"start": start_index, "limit": batch_size}
-            response = self.session.get(
-                url, headers=GarminClient._REQUIRED_HEADERS, params=params
-            )
-            response.raise_for_status()
+    def connectapi(self, path, **kwargs):
+        return self.garth.connectapi(path, **kwargs)
 
-            response_jsons = json.loads(response.text)
-            if not response_jsons or response_jsons == []:
-                break
+    def login(self):
+        """Log in using Garth."""
 
-            for response_json in response_jsons:
-                yield response_json
+        self.garth.login(self.username, self.password)
+        self.display_name = self.garth.profile["displayName"]
+        self.full_name = self.garth.profile["fullName"]
 
-    def get_workout(self, workout_id):
-        url = f"{self.connect_url}{GarminClient._WORKOUT_SERVICE_ENDPOINT}/workout/{workout_id}"
+        settings = self.garth.connectapi(self.garmin_connect_user_settings_url)
+        self.unit_system = settings["userData"]["measurementSystem"]
 
-        response = self.session.get(url, headers=GarminClient._REQUIRED_HEADERS)
-        response.raise_for_status()
+        return True
 
-        return json.loads(response.text)
+    def get_workouts(self, batch_size: int = 100):
+        """Return workouts from start till end."""
 
-    def download_workout(self, workout_id, file):
-        url = f"{self.connect_url}{GarminClient._WORKOUT_SERVICE_ENDPOINT}/workout/FIT/{workout_id}"
+        url = f"{self.garmin_workouts}/workouts"
 
-        response = self.session.get(url)
-        response.raise_for_status()
+        response_jsons = []
+        start_index = 0
+        end = start_index + batch_size
+        logger.debug(f"Requesting workouts from {start_index}-{end}")
+        params = {"start": 0, "limit": batch_size}
+        response = self.connectapi(url, params=params)
+        response_jsons.extend(response)
+        return response_jsons
 
-        with open(file, "wb") as f:
-            f.write(response.content)
+    def get_workout_by_id(self, workout_id: str):
+        """Return workout by id."""
+
+        url = f"{self.garmin_workouts}/workout/{workout_id}"
+        return self.connectapi(url)
+
+    def get_hrv_data(self, cdate: str) -> Dict[str, Any]:
+        """Return Heart Rate Variability (hrv) data for current user."""
+
+        url = f"{self.garmin_connect_hrv_url}/{cdate}"
+        logger.debug("Requesting Heart Rate Variability (hrv) data")
+
+        return self.connectapi(url)
 
     def save_workout(self, workout):
-        url = f"{self.connect_url}{GarminClient._WORKOUT_SERVICE_ENDPOINT}/workout"
-
-        response = self.session.post(
-            url, headers=GarminClient._REQUIRED_HEADERS, json=workout
-        )
-        response.raise_for_status()
+        url = f"{self.garmin_workouts}/workouts"
+        # TODO: create workout here
+        payload = workout.create_json()
+        return self.garth.post("connectapi", url, json=payload)
 
     def update_workout(self, workout_id, workout):
-        url = f"{self.connect_url}{GarminClient._WORKOUT_SERVICE_ENDPOINT}/workout/{workout_id}"
+        url = f"{self.garmin_workouts}/workouts/{workout_id}"
 
-        response = self.session.put(
-            url, headers=GarminClient._REQUIRED_HEADERS, json=workout
+        # TODO: create workout here
+        payload = workout.create_json()
+        return self.garth.post("connectapi", url, json=payload)
+
+    def delete_workout(self, workout_id: str):
+        url = f"{self.garmin_workouts}/workouts/{workout_id}"
+        return self.garth.request(
+            "DELETE",
+            "connectapi",
+            url,
+            api=True,
         )
-        response.raise_for_status()
 
-    def delete_workout(self, workout_id):
-        url = f"{self.connect_url}{GarminClient._WORKOUT_SERVICE_ENDPOINT}/workout/{workout_id}"
-
-        response = self.session.delete(url, headers=GarminClient._REQUIRED_HEADERS)
-        response.raise_for_status()
-
-    def schedule_workout(self, workout_id, date):
-        url = f"{self.connect_url}{GarminClient._WORKOUT_SERVICE_ENDPOINT}/schedule/{workout_id}"
-        json_data = {"date": date}
-
-        response = self.session.post(
-            url, headers=GarminClient._REQUIRED_HEADERS, json=json_data
-        )
-        response.raise_for_status()
+    def schedule_workout(self, workout_id: str, date: str):
+        url = f"{self.garmin_workouts}/schedule/{workout_id}"
+        payload = {"date": date}
+        return self.garth.post("connectapi", url, json=payload)

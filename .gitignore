@@ -5,3 +5,4 @@ venv
 .garmin-cookies.txt
 coverage.xml
 .ruff_cache
+/samples
