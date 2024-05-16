@@ -3,6 +3,7 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![CI](https://github.com/alfranz/garmin-workouts/actions/workflows/ci.yml/badge.svg)](https://github.com/alfranz/garmin-workouts/actions/workflows/ci.yml)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/alfranz/garmin-workouts/master.svg)](https://results.pre-commit.ci/latest/github/alfranz/garmin-workouts/master)
+[![codecov](https://codecov.io/github/alfranz/garmin-workouts/graph/badge.svg?token=1NKLC2J9RP)](https://codecov.io/github/alfranz/garmin-workouts)
 
 Command line tools for managing Garmin Connect workouts.
 
