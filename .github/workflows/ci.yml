@@ -7,17 +7,13 @@ on:
   pull_request:
     branches:
       - master
-jobs:
 
+jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         python-version: ["3.9", "3.10", "3.11"]
-
-    env:
-      PYTHON_VERSION: ${{ matrix.python-version }}
 
     steps:
       - uses: actions/checkout@v4
@@ -25,13 +21,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: pytest --cov=garminworkouts --cov-report=xml tests
-      - uses: codecov/codecov-action@v4
-        with:
-          env_vars: PYTHON_VERSION
       - name: Upload coverage reports to Codecov
-          uses: codecov/codecov-action@v4.0.1
-          with:
-            token: ${{ secrets.CODECOV_TOKEN }}
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+          name: Coverage Python ${{ matrix.python-version }}
+
   result:
     if: ${{ always() }}
     runs-on: ubuntu-latest
@@ -43,4 +39,3 @@ jobs:
             exit 0
           else
             exit 1
-          fi
