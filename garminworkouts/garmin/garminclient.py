@@ -2,6 +2,7 @@ import logging
 import garth
 from typing import Optional, Dict, Any
 import os
+from garminworkouts.models.workout import Workout
 
 logger = logging.getLogger(__name__)
 
@@ -14,9 +15,9 @@ class GarminException(Exception):
 
 class GarminClient:
     def __init__(self, username: Optional[str] = None, password: Optional[str] = None):
-        if not username and not os.getenv("GARMIN_USERNAME"):
+        if not username and os.getenv("GARMIN_USERNAME") is None:
             raise GarminException("Username is required")
-        if not password and not os.getenv("GARMIN_PASSWORD"):
+        if not password and os.getenv("GARMIN_PASSWORD") is None:
             raise GarminException("Password is required")
 
         self.username = os.getenv("GARMIN_USERNAME") if username is None else "username"
@@ -66,25 +67,23 @@ class GarminClient:
         url = f"{self.garmin_workouts}/workout/{workout_id}"
         return self.connectapi(url)
 
-    def get_hrv_data(self, cdate: str) -> Dict[str, Any]:
+    def get_hrv_data(self, date: str) -> Dict[str, Any]:
         """Return Heart Rate Variability (hrv) data for current user."""
 
-        url = f"{self.garmin_connect_hrv_url}/{cdate}"
+        url = f"{self.garmin_connect_hrv_url}/{date}"
         logger.debug("Requesting Heart Rate Variability (hrv) data")
 
         return self.connectapi(url)
 
-    def save_workout(self, workout):
+    def save_workout(self, workout: Workout):
         url = f"{self.garmin_workouts}/workouts"
-        # TODO: create workout here
-        payload = workout.create_json()
+        payload = workout.create_workout()
         return self.garth.post("connectapi", url, json=payload)
 
-    def update_workout(self, workout_id, workout):
+    def update_workout(self, workout_id: str, workout: Workout):
         url = f"{self.garmin_workouts}/workouts/{workout_id}"
 
-        # TODO: create workout here
-        payload = workout.create_json()
+        payload = workout.create_workout()
         return self.garth.post("connectapi", url, json=payload)
 
     def delete_workout(self, workout_id: str):
