@@ -49,7 +49,3 @@ def test_equality(pace1_str, pace2_str, are_equal):
 def test_invalid_pace(invalid_pace_str):
     with pytest.raises(ValueError):
         Pace(invalid_pace_str)
-
-
-if __name__ == "__main__":
-    pytest.main()
