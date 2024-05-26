@@ -49,3 +49,29 @@ def test_equality(pace1_str, pace2_str, are_equal):
 def test_invalid_pace(invalid_pace_str):
     with pytest.raises(ValueError):
         Pace(invalid_pace_str)
+
+
+def test_greater_than():
+    pace1 = Pace("5:00")
+    pace2 = Pace("6:00")
+    assert pace2 > pace1
+
+
+def test_less_than():
+    pace1 = Pace("5:00")
+    pace2 = Pace("6:00")
+    assert pace1 < pace2
+
+
+def test_greater_than_or_equal():
+    pace1 = Pace("5:00")
+    pace2 = Pace("6:00")
+    assert pace2 >= pace1
+    assert pace1 >= pace1
+
+
+def test_less_than_or_equal():
+    pace1 = Pace("5:00")
+    pace2 = Pace("6:00")
+    assert pace1 <= pace2
+    assert pace1 <= pace1

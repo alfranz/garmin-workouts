@@ -24,6 +24,21 @@ class Pace:
             return False
         return self.minutes_per_km == other.minutes_per_km
 
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __ge__(self, other):
+        return self.minutes_per_km >= other.minutes_per_km
+
+    def __le__(self, other):
+        return self.minutes_per_km <= other.minutes_per_km
+
+    def __gt__(self, other):
+        return self.minutes_per_km > other.minutes_per_km
+
+    def __lt__(self, other):
+        return self.minutes_per_km < other.minutes_per_km
+
     def __str__(self):
         # Convert minutes per km back to "min:sec/km" format
         total_seconds = int(self.minutes_per_km * 60)
