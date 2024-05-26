@@ -24,11 +24,12 @@ class Pace:
             return False
         return self.minutes_per_km == other.minutes_per_km
 
+    def __ge__(self, other):
+        # Note: GE refers to more minutes per km NOT faster pace
+        return self.minutes_per_km >= other.minutes_per_km
+
     def __ne__(self, other):
         return not self.__eq__(other)
-
-    def __ge__(self, other):
-        return self.minutes_per_km >= other.minutes_per_km
 
     def __le__(self, other):
         return self.minutes_per_km <= other.minutes_per_km
