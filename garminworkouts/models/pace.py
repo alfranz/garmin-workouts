@@ -1,29 +1,23 @@
 class Pace:
-    def __init__(self, pace_str):
+    def __init__(self, pace_str: str):
         # Expecting pace_str in the format "min:sec/km" (e.g., "5:00")
         self.pace_str = pace_str
         self.minutes_per_km = self._parse_time(pace_str)
 
-    def _parse_time(self, time_str):
+    def _parse_time(self, time_str: str) -> float:
         # Convert "min:sec" string to float representing minutes
         if time_str.startswith("-"):
-            negative = True
-            time_str = time_str[1:]
-        else:
-            negative = False
+            raise ValueError("Negative paces are not supported")
+        if time_str.count(":") != 1:
+            raise ValueError(f"Invalid time format: {time_str} - Should be 'min:sec'")
 
         minutes, seconds = map(int, time_str.split(":"))
         total_minutes = minutes + seconds / 60.0
-        return -total_minutes if negative else total_minutes
+        return total_minutes
 
-    def to_min_per_km(self, diff_str=None):
-        # Return the pace as min/km with optional difference applied
-        if diff_str:
-            diff_minutes = self._parse_time(diff_str)
-            adjusted_pace = self.minutes_per_km + diff_minutes
-        else:
-            adjusted_pace = self.minutes_per_km
-        return max(adjusted_pace, 0)  # Ensure pace is not negative
+    def to_min_per_km(self) -> float:
+        adjusted_pace = self.minutes_per_km
+        return max(adjusted_pace, 0)
 
     def __eq__(self, other):
         if not isinstance(other, Pace):
