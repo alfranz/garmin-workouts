@@ -47,3 +47,10 @@ def test_pace_range_str(name, lower, upper, expected_str):
 def test_invalid_pace_range(lower, upper):
     with pytest.raises(ValueError):
         PaceRange("Invalid Range", Pace(lower), Pace(upper))
+
+
+def test_pace_range_bounds():
+    lower = Pace("4:30")
+    upper = Pace("4:40")
+    pace_range = PaceRange("MP (Marathon Pace)", lower, upper)
+    assert pace_range.bounds == (lower, upper)
