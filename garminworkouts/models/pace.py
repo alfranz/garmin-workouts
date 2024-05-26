@@ -46,3 +46,26 @@ class Pace:
         minutes = total_seconds // 60
         seconds = total_seconds % 60
         return f"{minutes}:{seconds:02d}"
+
+
+class PaceRange:
+    def __init__(self, name: str, lower: Pace, upper: Pace):
+        self.name = name
+        if not (lower <= upper):
+            raise ValueError("Lower pace must be less or equal to upper pace")
+        self.lower = lower
+        self.upper = upper
+
+    @property
+    def bounds(self) -> tuple[Pace, Pace]:
+        return (self.lower, self.upper)
+
+    def __str__(self) -> str:
+        return f"{self.name}: {str(self.lower)} - {str(self.upper)}"
+
+    def contains(self, pace: Pace) -> bool:
+        return (
+            self.lower.to_min_per_km()
+            <= pace.to_min_per_km()
+            <= self.upper.to_min_per_km()
+        )
