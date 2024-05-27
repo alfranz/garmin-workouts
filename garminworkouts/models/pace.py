@@ -16,8 +16,16 @@ class Pace:
         return total_minutes
 
     def to_min_per_km(self) -> float:
-        adjusted_pace = self.minutes_per_km
-        return max(adjusted_pace, 0)
+        return self.minutes_per_km
+
+    def to_m_per_s(self) -> float:
+        sec_per_km = self.minutes_per_km * 60
+        # sec/km to m/s
+        return 1000 / sec_per_km
+
+    def to_garmin(self) -> float:
+        # alias for to_m_per_s
+        return self.to_m_per_s()
 
     def __eq__(self, other):
         if not isinstance(other, Pace):
