@@ -57,12 +57,12 @@ class Pace:
 
 
 class PaceRange:
-    def __init__(self, name: str, lower: Pace, upper: Pace):
+    def __init__(self, name: str, lower: str, upper: str):
         self.name = name
         if not (lower <= upper):
             raise ValueError("Lower pace must be less or equal to upper pace")
-        self.lower = lower
-        self.upper = upper
+        self.lower = Pace(lower)
+        self.upper = Pace(upper)
 
     @property
     def bounds(self) -> tuple[Pace, Pace]:
