@@ -5,6 +5,11 @@ from garminworkouts.models.pace import Pace
 @pytest.mark.parametrize(
     "pace_str, expected_minutes_per_km",
     [
+        (
+            "1:12",
+            1.2,
+        ),
+        ("1:18", 1.3),
         ("5:00", 5.0),
         ("5:15", 5.25),
         ("6:00", 6.0),
@@ -80,18 +85,18 @@ def test_less_than_or_equal():
 @pytest.mark.parametrize(
     "min_per_km, expected_m_per_s",
     [
-        (0.5, 33.333),  # 0:30 min/km (extremely fast)
-        (0.6, 27.778),  # 0:36 min/km
-        (0.7, 23.810),  # 0:42 min/km
-        (1.0, 16.667),  # 1:00 min/km
-        (1.1, 15.152),  # 1:06 min/km
-        (1.2, 13.889),  # 1:12 min/km
-        (1.3, 12.821),  # 1:18 min/km
-        (5.0, 3.333),  # 5:00 min/km
-        (5.5, 3.030),  # 5:30 min/km
-        (6.0, 2.778),  # 6:00 min/km
-        (10.0, 1.667),  # 10:00 min/km
-        (10.5, 1.587),  # 10:30 min/km
+        ("0:30", 33.333),
+        ("0:36", 27.778),
+        ("0:42", 23.810),
+        ("1:00", 16.667),
+        ("1:06", 15.152),
+        ("1:12", 13.889),
+        ("1:18", 12.821),
+        ("5:00", 3.333),
+        ("5:30", 3.030),
+        ("6:00", 2.778),
+        ("10:00", 1.667),
+        ("10:30", 1.587),
     ],
 )
 def test_convert_pace_to_m_per_s(min_per_km, expected_m_per_s):
