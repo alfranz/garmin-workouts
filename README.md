@@ -157,35 +157,6 @@ steps:
 * All nested sections are mapped as repeated steps in Garmin Connect.
 First repeat for warmup, second repeat for main interval (repeated 3 times) and the last one for cool down.
 
-To import your workout from an `xlsx` file, construct a table in Excel that looks like this (making sure that all Excel
-cells are set to text and not to date or any other format):
-
-| Start | End | Duration |
-|-------|-----|----------|
-| 43    | 85  | 3:00     |
-| 85    |     | 15:00    |
-| 85    | 43  | 2:00     |
-
-If your "start" and "end" power for a step differ, a ramp of 10 seconds steps will be created by default for the chosen
-duration. If more than 50 total steps are to be uploaded ramp's steps will get longer so that the total number of steps
-is under Garmin maximum value of 50. **TIPS** *Do not use your TACX without the power cable as your Garmin will have a
-hard time controlling the trainer while changing from one step to the next. Turn off the tones in your Garmin.* If you
-wish to give your values in W instead of % of your FTP:
-
-| Start | End  | Duration |
-|-------|------|----------|
-| 80W   | 160W | 3:00     |
-| 160W  |      | 15:00    |
-| 160W  | 80W  | 2:00     |
-
-You can then import as with the `yaml` files:
-
-```shell
-python -m garminworkouts import --ftp [YOUR_FTP] my.workout.xlsx
-```
-
-This will generate a `yaml` file with the name `my.workout.xlsx`. The name of the workout will be "my.workout".
-
 ### Export Workouts
 
 Export all workouts from Garmin Connect into local directory as FIT files.
@@ -223,19 +194,11 @@ $ python -m garminworkouts get --id [WORKOUT_ID]
 {"workoutId": 188952654, "ownerId": 2043461, "workoutName": "VO2MAX 5x4", "description": "FTP 214, TSS 80, NP 205, IF 0.96", "updatedDate": "2020-02-11T14:37:56.0", ...
 ```
 
-### Delete Workout
-
-Permanently delete workout from Garmin Connect:
-
-```shell
-python -m garminworkouts delete --id [WORKOUT_ID]
-```
-
 ### Schedule  Workouts
 
 Schedule preexisting workouts using the workout number (e.g. "<https://connect.garmin.com/modern/workout/234567894>")
 The workout number is the last digits of the URL here: 234567894
-Note: the date format is as follows : 2021-12-31
+Note: the date format is as follows : "2024-04-20"
 
 ```shell
 python -m garminworkouts schedule -d [DATE] -w [WORKOUT_ID]

@@ -1,7 +1,6 @@
 requests==2.31.0
 pyyaml==6.0.1
 numpy==1.26.4
-xlrd==2.0.1
 pandas==2.2.2
 pytest-httpserver==1.0.10
 pre-commit==3.7.0
