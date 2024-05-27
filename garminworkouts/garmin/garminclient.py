@@ -28,8 +28,9 @@ class GarminClient:
         self.garmin_connect_user_settings_url = (
             "/userprofile-service/userprofile/user-settings"
         )
-        self.garmin_workouts = "/workout-service"
+        self.garmin_workouts_url = "/workout-service"
         self.garmin_connect_hrv_url = "/hrv-service/hrv"
+        self.garmin_activities_url = "/activity-service/activity"
 
         self.prompt_mfa = None
 
@@ -51,7 +52,7 @@ class GarminClient:
     def get_workouts(self, batch_size: int = 50) -> Generator[dict, None, None]:
         """Return workouts from start till end."""
 
-        url = f"{self.garmin_workouts}/workouts"
+        url = f"{self.garmin_workouts_url}/workouts"
         start_index = 0
 
         while True:
@@ -70,7 +71,7 @@ class GarminClient:
     def get_workout_by_id(self, workout_id: str):
         """Return workout by id."""
 
-        url = f"{self.garmin_workouts}/workout/{workout_id}"
+        url = f"{self.garmin_workouts_url}/workout/{workout_id}"
         return self.connectapi(url)
 
     def get_hrv_data(self, date: str) -> Dict[str, Any]:
@@ -82,18 +83,18 @@ class GarminClient:
         return self.connectapi(url)
 
     def save_workout(self, workout: Workout):
-        url = f"{self.garmin_workouts}/workouts"
+        url = f"{self.garmin_workouts_url}/workouts"
         payload = workout.create_workout()
         return self.garth.post("connectapi", url, json=payload)
 
     def update_workout(self, workout_id: str, workout: Workout):
-        url = f"{self.garmin_workouts}/workouts/{workout_id}"
+        url = f"{self.garmin_workouts_url}/workouts/{workout_id}"
 
         payload = workout.create_workout()
         return self.garth.post("connectapi", url, json=payload)
 
-    def delete_workout(self, workout_id: str):
-        url = f"{self.garmin_workouts}/workouts/{workout_id}"
+    def delete_activity(self, activity_id: str):
+        url = f"{self.garmin_activities_url}/{activity_id}"
         return self.garth.request(
             "DELETE",
             "connectapi",
@@ -101,7 +102,16 @@ class GarminClient:
             api=True,
         )
 
+    def delete_workout(self, workout_id: str):
+        # TODO: Check why this endpoint is not working
+        # url = f"{self.garmin_workouts_url}/workouts/{workout_id}"
+        # return self.garth.connectapi(
+        #     url,
+        #     method="DELETE",
+        # )
+        raise NotImplementedError("Method not implemented")
+
     def schedule_workout(self, workout_id: str, date: str):
-        url = f"{self.garmin_workouts}/schedule/{workout_id}"
+        url = f"{self.garmin_workouts_url}/schedule/{workout_id}"
         payload = {"date": date}
         return self.garth.post("connectapi", url, json=payload)
