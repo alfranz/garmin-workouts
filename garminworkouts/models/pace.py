@@ -57,23 +57,23 @@ class Pace:
 
 
 class PaceRange:
-    def __init__(self, name: str, lower: str, upper: str):
+    def __init__(self, name: str, low: str, high: str):
         self.name = name
-        if not (lower <= upper):
-            raise ValueError("Lower pace must be less or equal to upper pace")
-        self.lower = Pace(lower)
-        self.upper = Pace(upper)
+        if not (low <= high):
+            raise ValueError("low pace must be less or equal to high pace")
+        self.low = Pace(low)
+        self.high = Pace(high)
 
     @property
     def bounds(self) -> tuple[Pace, Pace]:
-        return (self.lower, self.upper)
+        return (self.low, self.high)
 
     def __str__(self) -> str:
-        return f"{self.name}: {str(self.lower)} - {str(self.upper)}"
+        return f"{self.name}: {str(self.low)} - {str(self.high)}"
 
     def contains(self, pace: Pace) -> bool:
         return (
-            self.lower.to_min_per_km()
+            self.low.to_min_per_km()
             <= pace.to_min_per_km()
-            <= self.upper.to_min_per_km()
+            <= self.high.to_min_per_km()
         )

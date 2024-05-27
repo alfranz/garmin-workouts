@@ -6,8 +6,8 @@ from pydantic import model_validator
 
 
 class WorkoutStep(BaseModel):
-    duration: Optional[int]  # duration in seconds
-    distance: Optional[int]  # distance in meters
+    duration: Optional[float] = None  # duration in seconds
+    distance: Optional[float] = None  # distance in meters
     target: Optional[str]  # should refer to a RunningZone
 
     @model_validator(mode="after")
@@ -24,6 +24,9 @@ class RunningWorkoutConfig(BaseModel):
     description: Optional[str]
     zones: list[PaceRange]
     steps: list[WorkoutStep]
+
+    class Config:
+        arbitrary_types_allowed = True
 
 
 class RunningWorkout:
