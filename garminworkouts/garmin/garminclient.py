@@ -3,6 +3,7 @@ import garth
 from typing import Optional, Dict, Any
 import os
 from garminworkouts.models.workout import Workout
+from typing import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -47,19 +48,24 @@ class GarminClient:
 
         return True
 
-    def get_workouts(self, batch_size: int = 100):
+    def get_workouts(self, batch_size: int = 50) -> Generator[dict, None, None]:
         """Return workouts from start till end."""
 
         url = f"{self.garmin_workouts}/workouts"
-
-        response_jsons = []
         start_index = 0
-        end = start_index + batch_size
-        logger.debug(f"Requesting workouts from {start_index}-{end}")
-        params = {"start": 0, "limit": batch_size}
-        response = self.connectapi(url, params=params)
-        response_jsons.extend(response)
-        return response_jsons
+
+        while True:
+            logger.debug(
+                f"Requesting workouts from {start_index}-{start_index + batch_size}"
+            )
+            params = {"start": start_index, "limit": batch_size}
+            response = self.connectapi(url, params=params)
+
+            if not response:
+                break
+
+            yield from response
+            start_index += batch_size
 
     def get_workout_by_id(self, workout_id: str):
         """Return workout by id."""
