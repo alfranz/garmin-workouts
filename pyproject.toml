@@ -16,7 +16,6 @@ garth = "^0.4.46"
 [tool.poetry.group.dev.dependencies]
 pytest_httpserver = "^1.0.10"
 pre-commit = "^3.7.1"
-pytest-socket = "*"
 pytest-mock = "^3.14.0"
 
 [build-system]
