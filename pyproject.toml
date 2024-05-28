@@ -7,7 +7,7 @@ license = "Apache"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9"
 requests = "^2.32.2"
 PyYAML = "^6.0.1"
 pandas = "^2.2.2"
@@ -16,6 +16,8 @@ garth = "^0.4.46"
 [tool.poetry.group.dev.dependencies]
 pytest_httpserver = "^1.0.10"
 pre-commit = "^3.7.1"
+pytest-socket = "*"
+pytest-mock = "^3.14.0"
 
 [build-system]
 requires = ["poetry-core"]
