@@ -54,3 +54,10 @@ def test_pace_range_bounds():
     upper = "4:40"
     pace_range = PaceRange("MP", lower, upper)
     assert pace_range.bounds == (Pace(lower), Pace(upper))
+
+
+def test_pace_range_repr():
+    lower = "4:30"
+    upper = "4:40"
+    pace_range = PaceRange("MP", lower, upper)
+    assert repr(pace_range) == f"PaceRange('MP', {Pace(lower)}, {Pace(upper)})"

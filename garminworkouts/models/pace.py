@@ -55,6 +55,9 @@ class Pace:
         seconds = total_seconds % 60
         return f"{minutes}:{seconds:02d}"
 
+    def __repr__(self):
+        return self.__class__.__name__ + f"({self.pace_str})"
+
 
 class PaceRange:
     def __init__(self, name: str, low: str, high: str):
@@ -69,7 +72,13 @@ class PaceRange:
         return (self.low, self.high)
 
     def __str__(self) -> str:
-        return f"{self.name}: {str(self.low)} - {str(self.high)}"
+        return repr(self)
+
+    def __repr__(self) -> str:
+        return (
+            self.__class__.__name__
+            + f"('{self.name}', {str(self.low)}, {str(self.high)})"
+        )
 
     def contains(self, pace: Pace) -> bool:
         return (
