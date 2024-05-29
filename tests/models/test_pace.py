@@ -117,3 +117,8 @@ def test_convert_pace_to_m_per_s(min_per_km, expected_m_per_s):
 def test_convert_to_garmin(pace_str):
     pace = Pace(pace_str)
     assert pace.to_garmin() == pace.to_m_per_s()
+
+
+def test_repr_pace():
+    pace = Pace("5:00")
+    assert repr(pace) == "Pace(5:00)"

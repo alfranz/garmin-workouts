@@ -1,11 +1,14 @@
 import logging
 import garth
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Union
 import os
 from garminworkouts.models.workout import Workout
+from garminworkouts.models.running_workout import RunningWorkout
 from typing import Generator
 
 logger = logging.getLogger(__name__)
+
+WorkoutType = Union[RunningWorkout, Workout]
 
 
 class GarminException(Exception):
@@ -82,13 +85,13 @@ class GarminClient:
 
         return self.connectapi(url)
 
-    def save_workout(self, workout: Workout):
-        url = f"{self.garmin_workouts_url}/workouts"
+    def save_workout(self, workout: WorkoutType):
+        url = f"{self.garmin_workouts_url}/workout"
         payload = workout.create_workout()
-        return self.garth.post("connectapi", url, json=payload)
+        return self.garth.post("connectapi", url, json=payload, api=True)
 
-    def update_workout(self, workout_id: str, workout: Workout):
-        url = f"{self.garmin_workouts_url}/workouts/{workout_id}"
+    def update_workout(self, workout_id: str, workout: WorkoutType):
+        url = f"{self.garmin_workouts_url}/workout/{workout_id}"
 
         payload = workout.create_workout()
         return self.garth.post("connectapi", url, json=payload)
@@ -103,13 +106,13 @@ class GarminClient:
         )
 
     def delete_workout(self, workout_id: str):
-        # TODO: Check why this endpoint is not working
-        # url = f"{self.garmin_workouts_url}/workouts/{workout_id}"
-        # return self.garth.connectapi(
-        #     url,
-        #     method="DELETE",
-        # )
-        raise NotImplementedError("Method not implemented")
+        url = f"{self.garmin_workouts_url}/workout/{workout_id}"
+        return self.garth.request(
+            "DELETE",
+            "connectapi",
+            url,
+            api=True,
+        )
 
     def schedule_workout(self, workout_id: str, date: str):
         url = f"{self.garmin_workouts_url}/schedule/{workout_id}"

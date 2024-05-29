@@ -49,3 +49,15 @@ def test_init_workout_step_with_distance():
 def test_init_workout_step_with_both_distance_and_duration():
     with pytest.raises(ValueError):
         WorkoutStep(duration=600, distance=3000, target="Easy")
+
+
+def test_running_workout_repr(running_workout_config):
+    workout = RunningWorkout(running_workout_config)
+    assert repr(workout) == f"RunningWorkout({running_workout_config})"
+
+
+def test_running_workout_summary_eq_str(running_workout_config):
+    workout = RunningWorkout(running_workout_config)
+    expected_summary = "Easy 5k Run: A very simple test running workout, 1km warmup, 3km easy pace, 1km cooldown"
+    assert workout.get_workout_summary() == expected_summary
+    assert str(workout) == workout.get_workout_summary()

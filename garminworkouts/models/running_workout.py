@@ -161,3 +161,12 @@ class RunningWorkout:
         }
 
         return workout
+
+    def get_workout_summary(self):
+        return f"{self.config.name}: {self.config.description}"
+
+    def __str__(self):
+        return self.get_workout_summary()
+
+    def __repr__(self):
+        return f"RunningWorkout({self.config})"
