@@ -163,10 +163,7 @@ class RunningWorkout:
         return workout
 
     def get_workout_summary(self):
-        return f"""
-        Running Workout \n
-        {self.config.name}: {self.config.description}
-        """
+        return f"{self.config.name}: {self.config.description}"
 
     def __str__(self):
         return self.get_workout_summary()
