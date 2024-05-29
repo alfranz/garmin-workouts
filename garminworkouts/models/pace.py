@@ -72,7 +72,7 @@ class PaceRange:
         return (self.low, self.high)
 
     def __str__(self) -> str:
-        return repr(self)
+        return f"{self.name}: {str(self.low)} - {str(self.high)}"
 
     def __repr__(self) -> str:
         return (
