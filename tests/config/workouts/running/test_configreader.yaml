@@ -1,0 +1,7 @@
+name: "Running 30 Min"
+description: "5 min easy, 20 min tempo, 5 min rest"
+settings: !include test_settings.yaml
+steps:
+  - { target: "easy", duration: "5:00" }
+  - { target: "tempo", duration: "20:00" }
+  - { target: "rest", duration: "5:00" }
