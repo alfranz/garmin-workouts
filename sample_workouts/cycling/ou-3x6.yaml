@@ -1,5 +1,5 @@
 name: "OU 3x6"
-
+!include inc/settings.yaml
 steps:
   - !include inc/warmup-long.yaml
   - &INTERVAL
