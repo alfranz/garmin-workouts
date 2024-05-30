@@ -27,10 +27,15 @@ class RunningWorkoutConfig(BaseModel):
 
 
 class RunningWorkout:
+    _WORKOUT_ID_FIELD = "workoutId"
+    _WORKOUT_OWNER_ID_FIELD = "ownerId"
+
     def __init__(self, config: RunningWorkoutConfig):
         self.config = config
 
-    def create_workout(self):
+    def create_workout(
+        self, workout_id: Optional[str] = None, workout_owner_id: Optional[str] = None
+    ):
         workout_steps = []
 
         # Create a dictionary for easy lookup of zones by name
@@ -103,8 +108,8 @@ class RunningWorkout:
             workout_steps.append(step_data)
 
         workout = {
-            "workoutId": None,  # or some generated ID
-            "ownerId": None,  # or some owner ID
+            self._WORKOUT_ID_FIELD: workout_id,
+            self._WORKOUT_OWNER_ID_FIELD: workout_owner_id,
             "workoutName": self.config.name,
             "description": self.config.description,
             "updatedDate": None,
