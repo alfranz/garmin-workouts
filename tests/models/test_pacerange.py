@@ -46,7 +46,7 @@ def test_pace_range_str(name, lower, upper, expected_str):
 )
 def test_invalid_pace_range(lower, upper):
     with pytest.raises(ValueError):
-        PaceRange("Invalid Range", Pace(lower), Pace(upper))
+        PaceRange("Invalid Range", lower, upper)
 
 
 def test_pace_range_bounds():
@@ -61,3 +61,10 @@ def test_pace_range_repr():
     upper = "4:40"
     pace_range = PaceRange("MP", lower, upper)
     assert repr(pace_range) == f"PaceRange('MP', {Pace(lower)}, {Pace(upper)})"
+
+
+def test_parse_pace_range():
+    pace_range = PaceRange.from_str("MP", "4:30 - 4:40")
+    assert pace_range.name == "MP"
+    assert pace_range.low == Pace("4:30")
+    assert pace_range.high == Pace("4:40")

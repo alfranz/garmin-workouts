@@ -62,10 +62,10 @@ class Pace:
 class PaceRange:
     def __init__(self, name: str, low: str, high: str):
         self.name = name
-        if not (low <= high):
-            raise ValueError("low pace must be less or equal to high pace")
         self.low = Pace(low)
         self.high = Pace(high)
+        if not (Pace(low) <= Pace(high)):
+            raise ValueError("low pace must be less or equal to high pace")
 
     @property
     def bounds(self) -> tuple[Pace, Pace]:
@@ -86,3 +86,10 @@ class PaceRange:
             <= pace.to_min_per_km()
             <= self.high.to_min_per_km()
         )
+
+    @classmethod
+    def from_str(cls, name: str, pace_range: str):
+        low, high = pace_range.split("-")
+        if not low and not high:
+            raise ValueError(f"Could not read PaceRange from string {pace_range}")
+        return cls(name, low.strip(), high.strip())

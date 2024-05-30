@@ -1,5 +1,5 @@
-name: "Test"
-
+name: "Cycling Test"
+settings: !include test_settings.yaml
 steps:
   - !include test_configreader_inc.yaml
   - &INTERVAL
