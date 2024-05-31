@@ -5,13 +5,14 @@
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/alfranz/garmin-workouts/master.svg)](https://results.pre-commit.ci/latest/github/alfranz/garmin-workouts/master)
 [![codecov](https://codecov.io/github/alfranz/garmin-workouts/graph/badge.svg?token=1NKLC2J9RP)](https://codecov.io/github/alfranz/garmin-workouts)
 
-Command line tools for managing Garmin Connect workouts.
+Python commandline for managing Garmin Connect workouts.
 
 *Note: This is a fork of the original project by [mkuthan](https://github.com/mkuthan/garmin-workouts)*
 
 Features:
 
 * Target power is set according to your current FTP.
+* You can define custom pace zones for running workouts.
 * All workouts under Your control stored as JSON files.
 * Easy to understand workout format, see examples below.
 * Workout parts like warm-up or cool-down are reusable.
@@ -20,13 +21,14 @@ Features:
 
 ## Roadmap
 
-* [ ] add Running workouts
+* [x] add Running workouts
 
 ## Installation
 
 Requirements:
 
 * Python 3.9-3.11
+* [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
 
 Clone this repo:
 
@@ -38,20 +40,11 @@ Use the venv command to create a virtual copy of the entire Python installation.
 
 ```shell
 cd garmin-workouts
-python -m venv venv
 ```
-
-Set your shell to use the venv paths for Python by activating the virtual environment:
 
 ```shell
 source venv/bin/activate
-```
-
-Install dependencies:
-
-```shell
-pip install -r requirements.txt
-pre-commit install
+poetry install
 ```
 
 ## Usage
