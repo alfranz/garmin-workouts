@@ -39,7 +39,7 @@ def parse_config(config: dict) -> Union[Workout, RunningWorkout]:
                 WorkoutStep(
                     duration=duration,
                     distance=distance,
-                    target=step["target"],
+                    zone=step["target"],
                 )
             )
 

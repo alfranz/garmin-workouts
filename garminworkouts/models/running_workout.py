@@ -6,7 +6,7 @@ from garminworkouts.models.pace import PaceRange
 class WorkoutStep(BaseModel):
     duration: Optional[float] = None  # duration in seconds
     distance: Optional[float] = None  # distance in meters
-    target: str  # should refer to a RunningZone
+    zone: str
 
     @model_validator(mode="after")
     def check_duration_or_distance(self):
@@ -99,8 +99,8 @@ class RunningWorkout:
                 "weightUnit": None,
             }
 
-            if step.target:
-                zone = zones_dict[step.target]
+            if step.zone:
+                zone = zones_dict[step.zone]
                 step_data["description"] = f"{zone} min/km"
                 step_data["targetValueOne"] = zone.low.to_garmin()
                 step_data["targetValueTwo"] = zone.high.to_garmin()
