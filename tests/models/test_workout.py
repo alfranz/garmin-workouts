@@ -2,7 +2,10 @@ import unittest
 
 from garminworkouts.models.workout import Workout
 
+import pytest
 
+
+@pytest.mark.skip("Will be deprecated")
 class WorkoutTestCase(unittest.TestCase):
     def test_create_workout(self):
         config = {

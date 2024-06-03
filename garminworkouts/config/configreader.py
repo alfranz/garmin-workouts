@@ -8,6 +8,7 @@ from garminworkouts.models.running_workout import (
     WorkoutStep,
 )
 from garminworkouts.models.duration import Duration
+from garminworkouts.models.distance import Distance
 
 from garminworkouts.models.pace import PaceRange
 from pathlib import Path
@@ -32,23 +33,27 @@ def parse_config(config: dict) -> Union[Workout, RunningWorkout]:
                 duration = Duration(duration).to_seconds()
             distance = step.get("distance")
             if distance:
-                # TODO: Implement distance parser conversion
-                distance = distance
+                distance = Distance(distance).distance_meters
 
             workout_steps.append(
                 WorkoutStep(
                     duration=duration,
                     distance=distance,
-                    zone=step["target"],
+                    zone=step["zone"],
                 )
             )
 
         run_config = RunningWorkoutConfig(
             name=config["name"],
-            description=config["description"],
+            description=config.get("description", ""),
             zones=zones,
             steps=workout_steps,
         )
         return RunningWorkout(run_config)
     else:
         return Workout(config)
+
+
+def read_workout(file: str) -> RunningWorkout:
+    config = read_config(file)
+    return parse_config(config)

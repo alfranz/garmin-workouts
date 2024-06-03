@@ -1,6 +1,8 @@
 from typing import Optional
+from typing import Union
 from pydantic import BaseModel, model_validator, ConfigDict
 from garminworkouts.models.pace import PaceRange
+from garminworkouts.models.workout import Workout
 
 
 class WorkoutStep(BaseModel):
@@ -23,13 +25,10 @@ class RunningWorkoutConfig(BaseModel):
     name: str
     description: Optional[str]
     zones: list[PaceRange]
-    steps: list[WorkoutStep]
+    steps: list[Union[WorkoutStep, list[WorkoutStep]]]
 
 
-class RunningWorkout:
-    _WORKOUT_ID_FIELD = "workoutId"
-    _WORKOUT_OWNER_ID_FIELD = "ownerId"
-
+class RunningWorkout(Workout):
     def __init__(self, config: RunningWorkoutConfig):
         self.config = config
 

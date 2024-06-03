@@ -5,7 +5,62 @@ from garminworkouts.models.power import Power
 from garminworkouts.utils import functional, math
 
 
-class Workout(object):
+class Workout:
+    _WORKOUT_ID_FIELD = "workoutId"
+    _WORKOUT_NAME_FIELD = "workoutName"
+    _WORKOUT_DESCRIPTION_FIELD = "description"
+    _WORKOUT_OWNER_ID_FIELD = "ownerId"
+
+    _CYCLING_SPORT_TYPE = {"sportTypeId": 2, "sportTypeKey": "cycling"}
+
+    _INTERVAL_STEP_TYPE = {
+        "stepTypeId": 3,
+        "stepTypeKey": "interval",
+    }
+
+    _REPEAT_STEP_TYPE = {
+        "stepTypeId": 6,
+        "stepTypeKey": "repeat",
+    }
+
+    def __init__(self, config):
+        self.config = config
+
+    def create_workout(self, workout_id=None, workout_owner_id=None):
+        raise NotImplementedError("Needs to be implemented.")
+
+    def get_workout_name(self) -> str:
+        return self.config["name"]
+
+    @staticmethod
+    def extract_workout_id(workout) -> str:
+        return workout[Workout._WORKOUT_ID_FIELD]
+
+    @staticmethod
+    def extract_workout_name(workout) -> str:
+        return workout[Workout._WORKOUT_NAME_FIELD]
+
+    @staticmethod
+    def extract_workout_description(workout) -> str:
+        return workout[Workout._WORKOUT_DESCRIPTION_FIELD]
+
+    @staticmethod
+    def extract_workout_owner_id(workout):
+        return workout[Workout._WORKOUT_OWNER_ID_FIELD]
+
+    @staticmethod
+    def print_workout_json(workout):
+        print(json.dumps(functional.filter_empty(workout)))
+
+    @staticmethod
+    def print_workout_summary(workout):
+        workout_id = Workout.extract_workout_id(workout)
+        workout_name = Workout.extract_workout_name(workout)
+        workout_description = Workout.extract_workout_description(workout)
+        print("{0} {1:20} {2}".format(workout_id, workout_name, workout_description))
+
+
+class CyclingWorkout:
     _WORKOUT_ID_FIELD = "workoutId"
     _WORKOUT_NAME_FIELD = "workoutName"
     _WORKOUT_DESCRIPTION_FIELD = "description"
