@@ -5,13 +5,14 @@
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/alfranz/garmin-workouts/master.svg)](https://results.pre-commit.ci/latest/github/alfranz/garmin-workouts/master)
 [![codecov](https://codecov.io/github/alfranz/garmin-workouts/graph/badge.svg?token=1NKLC2J9RP)](https://codecov.io/github/alfranz/garmin-workouts)
 
-Command line tools for managing Garmin Connect workouts.
+Python commandline for managing Garmin Connect workouts.
 
 *Note: This is a fork of the original project by [mkuthan](https://github.com/mkuthan/garmin-workouts)*
 
 Features:
 
 * Target power is set according to your current FTP.
+* You can define custom pace zones for running workouts.
 * All workouts under Your control stored as JSON files.
 * Easy to understand workout format, see examples below.
 * Workout parts like warm-up or cool-down are reusable.
@@ -20,13 +21,14 @@ Features:
 
 ## Roadmap
 
-* [ ] add Running workouts
+* [x] add Running workouts
 
 ## Installation
 
 Requirements:
 
 * Python 3.9-3.11
+* [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
 
 Clone this repo:
 
@@ -34,32 +36,16 @@ Clone this repo:
 git clone https://github.com/alfranz/garmin-workouts.git
 ```
 
-Use the venv command to create a virtual copy of the entire Python installation.:
+And then install the CLI with `poetry`.
 
 ```shell
 cd garmin-workouts
-python -m venv venv
-```
-
-Set your shell to use the venv paths for Python by activating the virtual environment:
-
-```shell
-source venv/bin/activate
-```
-
-Install dependencies:
-
-```shell
-pip install -r requirements.txt
-pre-commit install
+poetry install
 ```
 
 ## Usage
 
 First call to Garmin Connect takes some time to authenticate user.
-Once user is authenticated [cookie jar](https://docs.python.org/3/library/http.cookiejar.html) is created with session
-cookies for further calls.
-It is required due to strict request limits for Garmin [SSO](https://en.wikipedia.org/wiki/Single_sign-on) service.
 
 ### Authentication
 
@@ -70,65 +56,59 @@ export GARMIN_USERNAME=username
 export GARMIN_PASSWORD=password
 ```
 
-Alternatively use `-u` and `-p` command line arguments:
-
-```shell
-python -m garminworkouts -u [USERNAME] -p [PASSWORD]
-```
+Alternatively use `-u` and `-p` command line arguments.
 
 ### Import Workouts
+
+*Only running workouts have been tested.*
 
 Import workouts into Garmin Connect from definitions in [YAML](https://yaml.org) files.
 If the workout already exists it will be updated:
 
 ```shell
-python -m garminworkouts import --ftp [YOUR_FTP] 'sample_workouts/*.yaml'
+garminworkouts import 'sample_workouts/running//*.yaml'
 ```
 
-Sample workout definition:
+Sample running workout definition:
 
 ```yaml
-name: "Boring as hell but simple workout"
-
+name: "Easy 10K with some strides"
+description: |
+      Easy 10K run at a conversational pace. 
+      In the last 2K, do 4x20sec strides at 80% effort.
+settings:
+  type: "running"
+  zones: { easy: "5:10-5:35", intervall: "3:20-3:40", rest: "5:30-10:00" }
 steps:
-  - { power: 50, duration: "10:00" }
-  - { power: 70, duration: "20:00" }
-  - { duration: "5:00" }
-  - { power: 70, duration: "20:00" }
-  - { power: 50 }
+  - { zone: "easy", distance: "8km" }
+  - &STRIDES
+    - &FAST { zone: "intervall", duration: "0:20" }
+    - &SLOW { zone: "rest", duration: "1:30" }
+  - *STRIDES
+  - *STRIDES
+  - *STRIDES
 ```
 
-* Target power is defined as percent of FTP (provided as mandatory command line parameter).
-If the target power is not specified "No target" will be used for the workout step.
-* Target power may be defined as absolute value like: "150W", it could be useful in FTP ramp tests.
-* Duration is defined as HH:MM:SS (or MM:SS, or SS) format.
-If the duration is not specified "Lap Button Press" will be used to move into next workout step.
+* Zones have to be defined as min/km with upper and lower pace targets, e.g. `5:10-5:35` format.
+
+Each workout step can be defined with either `duration` or `distance` keys:
+
+* Duration is defined as HH:MM:SS (or MM:SS, or SS) format.If the duration is not specified "Lap Button Press" will be used to move into next workout step.
+
+* Distance can be specified in kms or meters but shall always include the unit, e.g. "400 meters", "400M", "1km", "1 kilometer".
 
 Reusing workout definitions:
-
-```yaml
-name: "Boring as hell but simple workout"
-
-steps:
-  - !include inc/warmup.yaml
-  - { power: 70, duration: "20:00" }
-  - { duration: "5:00" }
-  - { power: 70, duration: "20:00" }
-  - !include inc/cooldown.yaml
-```
 
 * `!include` is a custom YAML directive for including another file as a part of the workout.
 
 Reusing workout steps:
 
 ```yaml
-name: "Boring as hell but simple workout"
-
 steps:
   - !include inc/warmup.yaml
-  - &INTERVAL { power: 70, duration: "20:00" }
+  - { power: 70, duration: "20:00" }
   - { duration: "5:00" }
-  - *INTERVAL
+  - { power: 70, duration: "20:00" }
   - !include inc/cooldown.yaml
 ```
 
@@ -137,60 +117,27 @@ steps:
 Sample Over-Under workout:
 
 ```yaml
-name: "OverUnder 3x9"
-
 steps:
-  - !include inc/warmup.yaml
-  - &INTERVAL
-    - &UNDER { power: 95, duration: "2:00" }
-    - &OVER { power: 105, duration: "1:00" }
-    - *UNDER
-    - *OVER
-    - *UNDER
-    - *OVER
-    - { power: 50, duration: "3:00" }
-  - *INTERVAL
-  - *INTERVAL
-  - !include inc/cooldown.yaml
+  - { zone: "easy", distance: "8km" }
+  - &STRIDES
+    - &FAST { zone: "intervall", duration: "0:20" }
+    - &SLOW { zone: "rest", duration: "1:30" }
+  - *STRIDES
+  - *STRIDES
+  - *STRIDES
 ```
 
 * All nested sections are mapped as repeated steps in Garmin Connect.
 First repeat for warmup, second repeat for main interval (repeated 3 times) and the last one for cool down.
 
-### Export Workouts
-
-Export all workouts from Garmin Connect into local directory as FIT files.
-This is the easiest way to synchronize all workouts with Garmin device:
-
-```shell
-python -m garminworkouts export /mnt/GARMIN/NewFiles
-```
-
-### List Workouts
-
-Print summary for all workouts (workout identifier, workout name and description):
-
-```shell
-$ python -m garminworkouts list
-188952654 VO2MAX 5x4           FTP 214, TSS 80, NP 205, IF 0.96
-188952362 TEMPO 3x15           FTP 214, TSS 68, NP 172, IF 0.81
-188952359 SS 3x12              FTP 214, TSS 65, NP 178, IF 0.83
-188952356 VO2MAX 5x3           FTP 214, TSS 63, NP 202, IF 0.95
-188952357 OU 3x9               FTP 214, TSS 62, NP 188, IF 0.88
-188952354 SS 4x9               FTP 214, TSS 65, NP 178, IF 0.83
-188952350 TEMPO 3x10           FTP 214, TSS 49, NP 169, IF 0.79
-188952351 TEMPO 3x12           FTP 214, TSS 57, NP 171, IF 0.80
-188952349 OU 3x6               FTP 214, TSS 47, NP 181, IF 0.85
-188952348 SS 6x6               FTP 214, TSS 65, NP 178, IF 0.83
-127739603 FTP RAMP             FTP 214, TSS 62, NP 230, IF 1.08
-```
+Check the `sample_workouts` folder to get an idea of the formatting possibilities.
 
 ### Get Workout
 
 Print full workout definition (as JSON):
 
 ```shell
-$ python -m garminworkouts get --id [WORKOUT_ID]
+$ garminworkouts get --id [WORKOUT_ID]
 {"workoutId": 188952654, "ownerId": 2043461, "workoutName": "VO2MAX 5x4", "description": "FTP 214, TSS 80, NP 205, IF 0.96", "updatedDate": "2020-02-11T14:37:56.0", ...
 ```
 
@@ -198,8 +145,8 @@ $ python -m garminworkouts get --id [WORKOUT_ID]
 
 Schedule preexisting workouts using the workout number (e.g. "<https://connect.garmin.com/modern/workout/234567894>")
 The workout number is the last digits of the URL here: 234567894
-Note: the date format is as follows : "2024-04-20"
+Note: the date format is as follows: "2024-04-20"
 
 ```shell
-python -m garminworkouts schedule -d [DATE] -w [WORKOUT_ID]
+garminworkouts schedule -d [DATE] -w [WORKOUT_ID]
 ```

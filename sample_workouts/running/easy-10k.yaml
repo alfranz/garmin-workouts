@@ -1,14 +1,17 @@
 name: "Easy 10K with some strides"
-type: "running"
 description: |
       Easy 10K run, should be done at a conversational pace. 
-      In the last 2K, do 4x20sec strides at 80% effort and around.
-zones: { easy: "5:10-5:35", tempo: "0:20-0:30", rest: "5:30-10:00" }
+      In the last 2K, do 4x20sec strides at 80% effort.
+settings:
+  sports_type: "running"
+  zones: { easy: "5:10-5:35", intervall: "3:20-3:40", rest: "5:30-10:00" }
 steps:
   - { zone: "easy", distance: "8km" }
-  - &STRIDES
-    - &FAST { zone: "intervall", duration: "0:20" }
-    - &SLOW { zone: "rest", duration: "1:30" }
-  - *STRIDES
-  - *STRIDES
-  - *STRIDES
+  - { zone: "intervall", duration: "0:20" }
+  - { zone: "rest", duration: "1:30" }
+  - { zone: "intervall", duration: "0:20" }
+  - { zone: "rest", duration: "1:30" }
+  - { zone: "intervall", duration: "0:20" }
+  - { zone: "rest", duration: "1:30" }
+  - { zone: "intervall", duration: "0:20" }
+  - { zone: "rest", duration: "1:30" }

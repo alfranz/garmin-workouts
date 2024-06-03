@@ -4,10 +4,11 @@ import typer
 from typing import Optional
 from typing_extensions import Annotated
 
-from garminworkouts.config import configreader
+from garminworkouts.config.configreader import read_workout
 from garminworkouts.garmin.garminclient import GarminClient
 
 from garminworkouts.models.workout import Workout
+from garminworkouts.models.running_workout import RunningWorkout
 
 app = typer.Typer(no_args_is_help=True)
 
@@ -41,19 +42,18 @@ def import_workout(
     password: Annotated[
         Optional[str],
         typer.Argument(
-            envvar="GARMIN_PASSWORD", help="Garmin Connect account password"
+            envvar="GARMIN_PASSWORD",
+            help="Garmin Connect account password",
         ),
     ],
 ):
     workout_files = glob.glob(workouts_path)
-    workouts = [
-        configreader.read_config(workout_file) for workout_file in workout_files
-    ]
+    workouts = [read_workout(workout_file) for workout_file in workout_files]
 
     client = _garmin_client(username, password)
 
     existing_workouts_by_name = {
-        Workout.extract_workout_name(w): w for w in client.list_workouts()
+        RunningWorkout.extract_workout_name(w): w for w in client.get_workouts()
     }
 
     for workout in workouts:

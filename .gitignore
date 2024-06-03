@@ -6,3 +6,4 @@ venv
 coverage.xml
 .ruff_cache
 /samples
+.vscode/

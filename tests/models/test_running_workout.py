@@ -16,9 +16,9 @@ def running_workout_config():
         description="A very simple test running workout, 1km warmup, 3km easy pace, 1km cooldown",
         zones=[PaceRange("WU/CD", "5:20", "6:00"), PaceRange("Easy", "5:30", "6:00")],
         steps=[
-            WorkoutStep(duration=600, target="WU/CD"),
-            WorkoutStep(distance=3000, target="Easy"),
-            WorkoutStep(duration=600, target="WU/CD"),
+            WorkoutStep(duration=600, zone="WU/CD"),
+            WorkoutStep(distance=3000, zone="Easy"),
+            WorkoutStep(duration=600, zone="WU/CD"),
         ],
     )
     return sample_config
@@ -33,22 +33,22 @@ def test_running_workout_creation(running_workout_config):
 
 
 def test_init_workout_step():
-    step = WorkoutStep(duration=600, target="Easy")
+    step = WorkoutStep(duration=600, zone="Easy")
     assert step.duration == 600
-    assert step.target == "Easy"
+    assert step.zone == "Easy"
     assert step.distance is None
 
 
 def test_init_workout_step_with_distance():
-    step = WorkoutStep(distance=3000, target="Easy")
+    step = WorkoutStep(distance=3000, zone="Easy")
     assert step.distance == 3000
-    assert step.target == "Easy"
+    assert step.zone == "Easy"
     assert step.duration is None
 
 
 def test_init_workout_step_with_both_distance_and_duration():
     with pytest.raises(ValueError):
-        WorkoutStep(duration=600, distance=3000, target="Easy")
+        WorkoutStep(duration=600, distance=3000, zone="Easy")
 
 
 def test_running_workout_repr(running_workout_config):

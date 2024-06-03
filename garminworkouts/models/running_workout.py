@@ -1,12 +1,14 @@
 from typing import Optional
+from typing import Union
 from pydantic import BaseModel, model_validator, ConfigDict
 from garminworkouts.models.pace import PaceRange
+from garminworkouts.models.workout import Workout
 
 
 class WorkoutStep(BaseModel):
     duration: Optional[float] = None  # duration in seconds
     distance: Optional[float] = None  # distance in meters
-    target: str  # should refer to a RunningZone
+    zone: str
 
     @model_validator(mode="after")
     def check_duration_or_distance(self):
@@ -23,13 +25,10 @@ class RunningWorkoutConfig(BaseModel):
     name: str
     description: Optional[str]
     zones: list[PaceRange]
-    steps: list[WorkoutStep]
+    steps: list[Union[WorkoutStep, list[WorkoutStep]]]
 
 
-class RunningWorkout:
-    _WORKOUT_ID_FIELD = "workoutId"
-    _WORKOUT_OWNER_ID_FIELD = "ownerId"
-
+class RunningWorkout(Workout):
     def __init__(self, config: RunningWorkoutConfig):
         self.config = config
 
@@ -99,8 +98,8 @@ class RunningWorkout:
                 "weightUnit": None,
             }
 
-            if step.target:
-                zone = zones_dict[step.target]
+            if step.zone:
+                zone = zones_dict[step.zone]
                 step_data["description"] = f"{zone} min/km"
                 step_data["targetValueOne"] = zone.low.to_garmin()
                 step_data["targetValueTwo"] = zone.high.to_garmin()
