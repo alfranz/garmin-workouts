@@ -1,4 +1,4 @@
-name: "19K w MP"
+name: "19K with 5k MP"
 description: |
       19K LR with 5K MP effort.
 settings: !include inc/zones.yaml
