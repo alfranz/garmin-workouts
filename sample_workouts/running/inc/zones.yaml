@@ -1,1 +1,2 @@
-zones: { easy: "5:00-5:25", tempo: "4:10-4:20", rest: "5:30-10:00" }
+sports_type: "running"
+zones: { easy: "5:00-5:30", mp: "4:25-4:35", tempo: "4:10-4:20", intervall: "3:55-4:10", strides: "3:20-3:50", rest: "5:30-10:00" }
