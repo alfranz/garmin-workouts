@@ -1,0 +1,8 @@
+name: "19K with 5k MP"
+description: |
+  19K LR with 5K MP effort.
+settings: !include inc/zones.yaml
+steps:
+  - {zone: "easy", distance: "8km"}
+  - {zone: "mp", distance: "5km"}
+  - {zone: "easy", distance: "6km"}

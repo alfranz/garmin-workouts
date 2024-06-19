@@ -26,7 +26,7 @@ def _garmin_client(
 
 
 @app.command(no_args_is_help=True)
-def import_workout(
+def sync(
     workouts_path: Annotated[
         str,
         typer.Argument(
@@ -47,6 +47,9 @@ def import_workout(
         ),
     ],
 ):
+    """
+    Sync your local workouts with Garmin Connect.
+    """
     workout_files = glob.glob(workouts_path)
     workouts = [read_workout(workout_file) for workout_file in workout_files]
 
@@ -70,3 +73,23 @@ def import_workout(
             payload = workout.create_workout()
             logging.info("Creating workout '%s'", workout_name)
             client.save_workout(payload)
+
+
+@app.command(no_args_is_help=True)
+def schedule(
+    workout_id: Annotated[
+        str,
+        typer.Argument(help="Garmin Workout ID to be scheduled"),
+    ],
+    date: Annotated[
+        str,
+        typer.Argument(
+            help="Date on which the workout shall be scheduled, e.g. '2024-04-20'"
+        ),
+    ],
+):
+    """
+    Schedules a Garmin Workout for a specific date.
+    """
+
+    print(f"Scheduling workout {workout_id}  on {date}")

@@ -1,0 +1,6 @@
+name: "8K Easy"
+description: |
+  8K Easy
+settings: !include inc/zones.yaml
+steps:
+  - {zone: "easy", distance: "8km"}

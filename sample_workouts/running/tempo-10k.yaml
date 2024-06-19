@@ -1,0 +1,8 @@
+name: "10K Tempo"
+description: |
+  10K with 3k Tempo inbetween.
+settings: !include inc/zones.yaml
+steps:
+  - {zone: "easy", distance: "4km"}
+  - {zone: "tempo", distance: "3km"}
+  - {zone: "easy", distance: "3km"}
