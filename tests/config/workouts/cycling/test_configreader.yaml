@@ -3,7 +3,7 @@ settings: !include test_settings.yaml
 steps:
   - !include test_configreader_inc.yaml
   - &INTERVAL
-    - { power: 90, duration: "12:00" }
-    - { power: 60, duration: "4:00" }
+      - {power: 90, duration: "12:00"}
+      - {power: 60, duration: "4:00"}
   - *INTERVAL
   - !include test_configreader_inc.yaml

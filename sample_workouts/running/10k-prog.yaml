@@ -1,9 +1,9 @@
 name: "10K Progressive"
 description: |
-      10K with 2/3k MP & Tempo sets inbetween.
+  10K with 2/3k MP & Tempo sets inbetween.
 settings: !include inc/zones.yaml
 steps:
-  - { zone: "easy", distance: "3km" }
-  - { zone: "mp", distance: "3km" }
-  - { zone: "tempo", distance: "2km" }
-  - { zone: "easy", distance: "2km" }
+  - {zone: "easy", distance: "3km"}
+  - {zone: "mp", distance: "3km"}
+  - {zone: "tempo", distance: "2km"}
+  - {zone: "easy", distance: "2km"}
