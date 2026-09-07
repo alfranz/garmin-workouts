@@ -1,13 +1,12 @@
-from typing import Optional
-from typing import Union
-from pydantic import BaseModel, model_validator, ConfigDict
+from pydantic import BaseModel, ConfigDict, model_validator
+
 from garminworkouts.models.pace import PaceRange
 from garminworkouts.models.workout import Workout
 
 
 class WorkoutStep(BaseModel):
-    duration: Optional[float] = None  # duration in seconds
-    distance: Optional[float] = None  # distance in meters
+    duration: float | None = None  # duration in seconds
+    distance: float | None = None  # distance in meters
     zone: str
 
     @model_validator(mode="after")
@@ -23,9 +22,9 @@ class RunningWorkoutConfig(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     name: str
-    description: Optional[str]
+    description: str | None
     zones: list[PaceRange]
-    steps: list[Union[WorkoutStep, list[WorkoutStep]]]
+    steps: list[WorkoutStep | list[WorkoutStep]]
 
 
 class RunningWorkout(Workout):
@@ -33,7 +32,7 @@ class RunningWorkout(Workout):
         self.config = config
 
     def create_workout(
-        self, workout_id: Optional[str] = None, workout_owner_id: Optional[str] = None
+        self, workout_id: str | None = None, workout_owner_id: str | None = None
     ):
         workout_steps = []
 
