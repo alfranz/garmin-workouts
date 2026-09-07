@@ -1,6 +1,6 @@
 import pytest
-from garminworkouts.models.pace import PaceRange
-from garminworkouts.models.pace import Pace
+
+from garminworkouts.models.pace import Pace, PaceRange
 
 
 @pytest.mark.parametrize(
