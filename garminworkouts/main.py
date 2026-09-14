@@ -1,21 +1,20 @@
 import glob
 import logging
+from typing import Annotated
+
 import typer
-from typing import Optional
-from typing_extensions import Annotated
 
 from garminworkouts.config.configreader import read_workout
 from garminworkouts.garmin.garminclient import GarminClient
-
-from garminworkouts.models.workout import Workout
 from garminworkouts.models.running_workout import RunningWorkout
+from garminworkouts.models.workout import Workout
 
 app = typer.Typer(no_args_is_help=True)
 
 
 def _garmin_client(
-    username: Optional[str],
-    password: Optional[str],
+    username: str | None,
+    password: str | None,
 ) -> GarminClient:
     client = GarminClient(
         username=username,
@@ -34,13 +33,13 @@ def sync(
         ),
     ],
     username: Annotated[
-        Optional[str],
+        str | None,
         typer.Argument(
             envvar="GARMIN_USERNAME", help="Garmin Connect account username"
         ),
     ],
     password: Annotated[
-        Optional[str],
+        str | None,
         typer.Argument(
             envvar="GARMIN_PASSWORD",
             help="Garmin Connect account password",

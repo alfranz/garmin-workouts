@@ -1,12 +1,11 @@
 import pytest
 
+from garminworkouts.models.pace import PaceRange
 from garminworkouts.models.running_workout import (
     RunningWorkout,
     RunningWorkoutConfig,
     WorkoutStep,
 )
-
-from garminworkouts.models.pace import PaceRange
 
 
 @pytest.fixture
