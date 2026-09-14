@@ -1,4 +1,5 @@
 import pytest
+
 from garminworkouts.models.distance import Distance
 
 

@@ -57,7 +57,7 @@ class Workout:
         workout_id = Workout.extract_workout_id(workout)
         workout_name = Workout.extract_workout_name(workout)
         workout_description = Workout.extract_workout_description(workout)
-        print("{0} {1:20} {2}".format(workout_id, workout_name, workout_description))
+        print(f"{workout_id} {workout_name:20} {workout_description}")
 
 
 class CyclingWorkout:
@@ -127,7 +127,7 @@ class CyclingWorkout:
         workout_id = Workout.extract_workout_id(workout)
         workout_name = Workout.extract_workout_name(workout)
         workout_description = Workout.extract_workout_description(workout)
-        print("{0} {1:20} {2}".format(workout_id, workout_name, workout_description))
+        print(f"{workout_id} {workout_name:20} {workout_description}")
 
     def _generate_description(self):
         # TODO: calculate Time in Zones
