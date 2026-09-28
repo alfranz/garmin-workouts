@@ -1,10 +1,12 @@
 import logging
-import garth
-from typing import Optional, Dict, Any, Union
 import os
-from garminworkouts.models.workout import Workout
+from collections.abc import Generator
+from typing import Any, Union
+
+import garth
+
 from garminworkouts.models.running_workout import RunningWorkout
-from typing import Generator
+from garminworkouts.models.workout import Workout
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +20,7 @@ class GarminException(Exception):
 
 
 class GarminClient:
-    def __init__(self, username: Optional[str] = None, password: Optional[str] = None):
+    def __init__(self, username: str | None = None, password: str | None = None):
         if not username and os.getenv("GARMIN_USERNAME") is None:
             raise GarminException("Username is required")
         if not password and os.getenv("GARMIN_PASSWORD") is None:
@@ -77,7 +79,7 @@ class GarminClient:
         url = f"{self.garmin_workouts_url}/workout/{workout_id}"
         return self.connectapi(url)
 
-    def get_hrv_data(self, date: str) -> Dict[str, Any]:
+    def get_hrv_data(self, date: str) -> dict[str, Any]:
         """Return Heart Rate Variability (hrv) data for current user."""
 
         url = f"{self.garmin_connect_hrv_url}/{date}"
