@@ -72,13 +72,10 @@ class PaceRange:
         return (self.low, self.high)
 
     def __str__(self) -> str:
-        return f"{self.name}: {str(self.low)} - {str(self.high)}"
+        return f"{self.name}: {self.low!s} - {self.high!s}"
 
     def __repr__(self) -> str:
-        return (
-            self.__class__.__name__
-            + f"('{self.name}', {str(self.low)}, {str(self.high)})"
-        )
+        return self.__class__.__name__ + f"('{self.name}', {self.low!s}, {self.high!s})"
 
     def contains(self, pace: Pace) -> bool:
         return (

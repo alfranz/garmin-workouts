@@ -1,6 +1,8 @@
 import os
+
 import pytest
-from garminworkouts.config.configreader import read_config, parse_config
+
+from garminworkouts.config.configreader import parse_config, read_config
 
 
 def get_test_file(filename: str):

@@ -1,8 +1,8 @@
 import unittest
 
-from garminworkouts.models.workout import Workout
-
 import pytest
+
+from garminworkouts.models.workout import Workout
 
 
 @pytest.mark.skip("Will be deprecated")
