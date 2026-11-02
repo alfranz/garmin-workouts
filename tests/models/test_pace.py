@@ -1,4 +1,5 @@
 import pytest
+
 from garminworkouts.models.pace import Pace
 
 
