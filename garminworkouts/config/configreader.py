@@ -1,26 +1,26 @@
+from pathlib import Path
+
 import yaml
+
 from garminworkouts.config.includeloader import IncludeLoader
-from typing import Union
-from garminworkouts.models.workout import Workout
+from garminworkouts.models.distance import Distance
+from garminworkouts.models.duration import Duration
+from garminworkouts.models.pace import PaceRange
 from garminworkouts.models.running_workout import (
     RunningWorkout,
     RunningWorkoutConfig,
     WorkoutStep,
 )
-from garminworkouts.models.duration import Duration
-from garminworkouts.models.distance import Distance
-
-from garminworkouts.models.pace import PaceRange
-from pathlib import Path
+from garminworkouts.models.workout import Workout
 
 
-def read_config(filename: Union[str, Path]) -> dict:
+def read_config(filename: str | Path) -> dict:
     with open(filename, "r") as f:
         data = yaml.load(f, IncludeLoader)
     return data
 
 
-def parse_config(config: dict) -> Union[Workout, RunningWorkout]:
+def parse_config(config: dict) -> Workout | RunningWorkout:
     if config["settings"]["sports_type"] == "running":
         zones = [
             PaceRange.from_str(z_name, zone_str)
